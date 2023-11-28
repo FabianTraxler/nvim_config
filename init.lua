@@ -1,10 +1,15 @@
 --[[ init.lua ]]
 
--- Impatient for faster loading
-require('impatient')
+vim.loader.enable()
 
 -- LEADER
 vim.g.mapleader = " " -- works across all nvim files
+
+-- IMPORTS
+require('vars') -- Variables
+require('opts') -- Options
+require('keys') -- Keymaps
+require('plug') -- Plugins
 
 -- Color theme
 require('kanagawa').setup({
@@ -23,11 +28,7 @@ hi GitSignsDelete guibg=#193549 guifg=#ff2600
 hi ColorColumn guifg=NONE guibg=#204563 gui=NONE
 ]])
 
--- IMPORTS
-require('vars') -- Variables
-require('opts') -- Options
-require('keys') -- Keymaps
-require('plug') -- Plugins
+
 
 -- Lua line
 require('lualine').setup {
@@ -48,34 +49,34 @@ require('lualine').setup {
 require("symbols-outline").setup {
     show_guides = false,
     position = 'left',
-    width = 35,
+    width = 25,
     wrap = false,
     keymaps = { fold = "h", unfold = "l", fold_all = "zM", unfold_all = "zR" },
     symbols = {
         File = { icon = "", hl = "@text.uri" },
-        Module = { icon = "全", hl = "@namespace" },
-        Namespace = { icon = "凜", hl = "@namespacee" },
-        Package = { icon = "", hl = "@namespacee" },
+        Module = { icon = "󰕳", hl = "@namespace" },
+        Namespace = { icon = "", hl = "@namespacee" },
+        Package = { icon = "󰏗", hl = "@namespacee" },
         Class = { icon = "", hl = "@type" },
-        Method = { icon = "", hl = "@method" },
+        Method = { icon = "", hl = "@method" },
         Property = { icon = "", hl = "@method" },
         Field = { icon = "", hl = "@field" },
         Constructor = { icon = "", hl = "@constructor" },
         Enum = { icon = "", hl = "@type" },
-        Interface = { icon = "ﰮ", hl = "@type" },
-        Function = { icon = "", hl = "@function" },
+        Interface = { icon = "󰠱", hl = "@type" },
+        Function = { icon = "󰊕", hl = "@function" },
         Variable = { icon = "", hl = "@constant" },
         Constant = { icon = "", hl = "@constant" },
         String = { icon = "", hl = "@string" },
         Number = { icon = "#", hl = "@number" },
         Boolean = { icon = "⊨", hl = "@boolean" },
-        Array = { icon = "", hl = "@constant" },
+        Array = { icon = "", hl = "@constant" },
         Object = { icon = "", hl = "@type" },
         Key = { icon = "🔐", hl = "@type" },
-        Null = { icon = "ﳠ", hl = "@type" },
+        Null = { icon = "󰟢", hl = "@type" },
         EnumMember = { icon = "", hl = "@field" },
         Struct = { icon = "", hl = "@type" },
-        Event = { icon = "🗲", hl = "@type" },
+        Event = { icon = "", hl = "@type" },
         Operator = { icon = "+", hl = "@operator" },
         TypeParameter = { icon = "", hl = "@parameter" }
     },
@@ -83,18 +84,18 @@ require("symbols-outline").setup {
 
 -- Better escape
 require("better_escape").setup {
-    mapping = { "jk", "kj" }, -- a table with mappings to use
+    mapping = { "jk", "kj" },   -- a table with mappings to use
     timeout = vim.o.timeoutlen, -- the time in which the keys must be hit in ms. Use option timeoutlen by default
-    clear_empty_lines = false, -- clear line after escaping if there is only whitespace
-    keys = "<Esc>", -- keys used for escaping, if it is a function will use the result everytime
+    clear_empty_lines = false,  -- clear line after escaping if there is only whitespace
+    keys = "<Esc>",             -- keys used for escaping, if it is a function will use the result everytime
 }
 
 
 -- FTerm
 require 'FTerm'.setup({
     border     = 'single',
-    -- cmd = os.getenv('SHELL'),
-    cmd        = 'fish',
+    cmd        = os.getenv('SHELL'),
+    -- cmd        = 'fish',
     blend      = 0,
     dimensions = {
         height = 0.9,
@@ -148,23 +149,7 @@ vim.cmd [[highlight IndentBlanklineIndent4 guifg=#2d3033 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent5 guifg=#2d3033 gui=nocombine]]
 vim.cmd [[highlight IndentBlanklineIndent6 guifg=#2d3033 gui=nocombine]]
 
-require("indent_blankline").setup {
-    -- char = '┊',
-    char = ' ',
-    use_treesitter = true,
-    use_treesitter_scope = true,
-    show_first_indent_level = true,
-    space_char_blankline = " ",
-    char_highlight_list = {
-        "IndentBlanklineIndent1",
-        "IndentBlanklineIndent2",
-        "IndentBlanklineIndent3",
-        "IndentBlanklineIndent4",
-        "IndentBlanklineIndent5",
-        "IndentBlanklineIndent6",
-    },
-}
-
+require("ibl").setup()
 
 -- Todo Comments Setup
 require('todo-comments').setup {
@@ -192,11 +177,6 @@ require('nvim-tree').setup {
     sort_by = "case_sensitive",
     view = {
         adaptive_size = false,
-        mappings = {
-            list = {
-                { key = "u", action = "dir_up" },
-            },
-        },
     },
     renderer = {
         group_empty = true,
@@ -247,7 +227,8 @@ require('telescope').setup {
 require('telescope').load_extension('media_files');
 -- Get fzf loaded and working with extension
 require('telescope').load_extension('fzf')
-
+-- Load undotree extension
+require("telescope").load_extension("undo");
 
 -- Autopairs Setup
 require 'nvim-autopairs'.setup {}
@@ -307,7 +288,7 @@ rt.setup({
 
 -- LUA
 -- -------------------------------------
-require 'lspconfig'.sumneko_lua.setup {
+require 'lspconfig'.lua_ls.setup {
     settings = {
         Lua = {
             runtime = {
@@ -403,15 +384,15 @@ cmp.setup({
     },
     -- Installed sources:
     sources = {
-        { name = 'path' }, -- file paths
-        { name = 'nvim_lsp', keyword_length = 1, priority = 10 }, -- from language server
-        { name = 'crates', keyword_length = 1, priority = 10 },
-        { name = 'luasnip', keyword_length = 1, priority = 7 }, -- for lua users
-        { name = 'nvim_lsp_signature_help', priority = 8 }, -- display function signatures with current parameter emphasized
-        { name = 'nvim_lua', keyword_length = 1, priority = 8 }, -- complete neovim's Lua runtime API such vim.lsp.*
-        { name = 'buffer', keyword_length = 1, priority = 5 }, -- source current buffer
+        { name = 'path' },                                                       -- file paths
+        { name = 'nvim_lsp',                keyword_length = 1, priority = 10 }, -- from language server
+        { name = 'crates',                  keyword_length = 1, priority = 10 },
+        { name = 'luasnip',                 keyword_length = 1, priority = 7 },  -- for lua users
+        { name = 'nvim_lsp_signature_help', priority = 8 },                      -- display function signatures with current parameter emphasized
+        { name = 'nvim_lua',                keyword_length = 1, priority = 8 },  -- complete neovim's Lua runtime API such vim.lsp.*
+        { name = 'buffer',                  keyword_length = 1, priority = 5 },  -- source current buffer
         -- { name = 'vsnip', keyword_length = 2 },         -- nvim-cmp source for vim-vsnip
-        { name = 'calc' }, -- source for math calculation
+        { name = 'calc' },                                                       -- source for math calculation
     },
     window = {
         completion = {
@@ -426,14 +407,14 @@ cmp.setup({
         fields = { 'menu', 'abbr', 'kind' },
         format = lspkind.cmp_format({
             mode = 'symbol_text', -- show only symbol annotations
-            maxwidth = 60, -- prevent the popup from showing more than provided characters
+            maxwidth = 60,        -- prevent the popup from showing more than provided characters
             -- The function below will be called before any actual modifications from lspkind:
             before = function(entry, vim_item)
                 local menu_icon = {
                     nvim_lsp = 'λ ',
                     luasnip = '⋗ ',
                     buffer = 'Ω ',
-                    path = '🖫 ',
+                    path = '󰴠',
                 }
                 vim_item.menu = menu_icon[entry.source.name]
                 return vim_item
@@ -473,7 +454,7 @@ cmp.setup.cmdline(':', {
 ----------------------------------------
 
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "bash", "c", "cmake", "css", "dockerfile", "go", "gomod", "gowork", "hcl", "help", "html",
+    ensure_installed = { "bash", "c", "cmake", "css", "dockerfile", "go", "gomod", "gowork", "hcl", "html",
         "http", "javascript", "json", "lua", "make", "markdown", "python", "regex", "ruby", "rust", "toml", "vim", "yaml",
         "zig" },
     auto_install = true,
@@ -483,8 +464,8 @@ require('nvim-treesitter.configs').setup {
     incremental_selection = {
         enable = true,
         keymaps = {
-            init_selection = "<S-Tab>", -- normal mode
-            node_incremental = "<Tab>", -- visual mode
+            init_selection = "<S-Tab>",  -- normal mode
+            node_incremental = "<Tab>",  -- visual mode
             node_decremental = "<S-Tab", -- visual mode
         },
     },
@@ -571,3 +552,12 @@ local actions = require("diffview.actions")
 
 require("diffview").setup({
 })
+
+vim.opt.termguicolors = true
+require("bufferline").setup {}
+
+
+map("n", "<leader>u", ":lua require('telescope').extensions.undo.undo({ side_by_side = true })<cr>")
+map("n", "<leader>u", ":lua require('telescope').extensions.undo.undo({ side_by_side = true })<cr>")
+map("n", "<leader>u", ":lua require('telescope').extensions.undo.undo({ side_by_side = true })<cr>")
+map("n", "<leader>u", ":lua require('telescope').extensions.undo.undo({ side_by_side = true })<cr>")

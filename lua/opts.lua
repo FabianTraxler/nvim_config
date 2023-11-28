@@ -22,35 +22,35 @@ vim.cmd([[
 map q <Nop>
 ]])
 
-opt.number = true -- bool: Show line numbers
-opt.relativenumber = true -- bool: Show relative line numbers
-opt.scrolloff = 4 -- int:  Min num lines of context
-opt.signcolumn = "yes" -- str:  Show the sign column
-opt.numberwidth = 4 -- gutter width
-set.cursorline = true -- display cursor line
+opt.number = true            -- bool: Show line numbers
+opt.relativenumber = false   -- bool: Show relative line numbers
+opt.scrolloff = 4            -- int:  Min num lines of context
+opt.signcolumn = "yes"       -- str:  Show the sign column
+opt.numberwidth = 4          -- gutter width
+set.cursorline = true        -- display cursor line
 set.cursorlineopt = 'number' --
--- set.laststatus = 3                  -- show just one status line
+set.laststatus = 3           -- show just one status line
 
 
 -- [[ Filetypes ]]
-opt.encoding = 'utf8' -- str:  String encoding to use
+opt.encoding = 'utf8'     -- str:  String encoding to use
 opt.fileencoding = 'utf8' -- str:  File encoding to use
 
 -- [[ Theme ]]
-opt.syntax = "ON" -- str:  Allow syntax highlighting
+opt.syntax = "ON"        -- str:  Allow syntax highlighting
 opt.termguicolors = true -- bool: If term supports ui color then enable
 
 -- [[ Search ]]
 opt.ignorecase = true -- bool: Ignore case in search patterns
-opt.smartcase = true -- bool: Override ignorecase if search contains capitals
-opt.incsearch = true -- bool: Use incremental search
-opt.hlsearch = false -- bool: Highlight search matches
+opt.smartcase = true  -- bool: Override ignorecase if search contains capitals
+opt.incsearch = true  -- bool: Use incremental search
+opt.hlsearch = false  -- bool: Highlight search matches
 
 -- [[ Whitespace ]]
 opt.expandtab = true -- bool: Use spaces instead of tabs
-opt.shiftwidth = 4 -- num:  Size of an indent
-opt.softtabstop = 4 -- num:  Number of spaces tabs count for in insert mode
-opt.tabstop = 4 -- num:  Number of spaces tabs count for
+opt.shiftwidth = 4   -- num:  Size of an indent
+opt.softtabstop = 4  -- num:  Number of spaces tabs count for in insert mode
+opt.tabstop = 4      -- num:  Number of spaces tabs count for
 
 -- [[ Splits ]]
 opt.splitright = true -- bool: Place new window to right of current one
@@ -91,9 +91,9 @@ local sign = function(opts)
         numhl = ''
     })
 end
-sign({ name = 'DiagnosticSignError', text = '' })
-sign({ name = 'DiagnosticSignWarn', text = '' })
-sign({ name = 'DiagnosticSignHint', text = '' })
+sign({ name = 'DiagnosticSignError', text = '' })
+sign({ name = 'DiagnosticSignWarn', text = '' })
+sign({ name = 'DiagnosticSignHint', text = '' })
 sign({ name = 'DiagnosticSignInfo', text = '' })
 
 vim.diagnostic.config({
@@ -118,3 +118,6 @@ set.signcolumn = 'yes'
 vim.cmd([[
 autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })
 ]])
+-- OWN
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true

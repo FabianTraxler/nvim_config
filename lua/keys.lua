@@ -1,5 +1,4 @@
 --[[ keys.lua ]]
-
 -- Functional wrapper for mapping custom keybindings
 -- mode (as in Vim modes like Normal/Insert mode)
 -- lhs (the custom keybinds you need)
@@ -40,6 +39,9 @@ vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 ]])
 
+map("i", "<C-z>", "<C-c>:u<cr>i")
+map("n", "<C-z>", ":u<cr>")
+
 -- Save and exit
 map("n", "<leader>w", ":w<CR>")
 map("n", "<leader>q", ":q<CR>")
@@ -73,9 +75,14 @@ map("n", "<leader>fc", ":lua require('telescope.builtin').commands()<cr>")
 map("n", "<leader>fch", ":lua require('telescope.builtin').command_history()<cr>")
 map("n", "<leader>fsh", ":lua require('telescope.builtin').search_history()<cr>")
 map("n", "<leader>fmp", ":lua require('telescope.builtin').man_pages()<cr>")
-map("n", "<leader>fgc", ":lua require('telescope.builtin').git_commits()<cr>")
-map("n", "<leader>fgb", ":lua require('telescope.builtin').git_branches()<cr>")
+map("n", "<leader>gc", ":lua require('telescope.builtin').git_commits()<cr>")
+map("n", "<leader>gb", ":lua require('telescope.builtin').git_branches()<cr>")
 
+
+-- OWN: undotree from telescope
+map("n", "<leader>u", ":lua require('telescope').extensions.undo.undo({ side_by_side = true })<cr>")
+--map("n", "<leader>u", ":lua require('telescope').extensions.undo.undo({ side_by_side = true })<cr>")
+--ÖLKFDS--ÖLKFDSJ AÖSLKDJF AÖLSDKFJ AÖLSKDJF ASÖLDKFJ SAÖLDKFJ .J AÖSLKDJF AÖLSDKFJ AÖLSKDJF ASÖLDKFJ SAÖLDKFJ .
 
 -- Todo List
 map("n", "<leader>qf", ":TodoQuickFix<cr>")
@@ -85,6 +92,7 @@ map("n", "<leader>e", ":TroubleToggle<cr>")
 
 -- Nvim Tree
 map("n", "<leader>nt", ":NvimTreeToggle<CR>")
+map("n", "<leader>nf", ":NvimTreeFocus<CR>")
 
 -- Transparency
 map("n", "<leader>\\", ":TransparentToggle<CR>")
@@ -112,6 +120,8 @@ nmap <F10> <cmd>call vimspector#StepOver()<cr>
 nmap <F6> <cmd>call vimspector#Reset()<cr>
 nmap <F11> <cmd>call vimspector#StepOut()<cr>")
 nmap <F9> <cmd>call vimspector#StepInto()<cr>")
+nmap <F8> <cmd>call vimspector#Continue()<cr>")
+nmap <F6> <cmd>call vimspector#Restart()<cr>")
 ]])
 map('n', "<F3>", ":call vimspector#ToggleBreakpoint()<cr>")
 map('n', "<F4>", ":call vimspector#AddWatch()<cr>")
@@ -122,12 +132,12 @@ map('n', "<F7>", ":call vimspector#Evaluate()<cr>")
 -- Code Actions
 map('n', "ca", ":lua vim.lsp.buf.code_action()<CR>")
 vim.cmd([[
-nnoremap <silent> <c-]>     <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <c-k>     <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> K         <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gh         <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gi        <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent> gc        <cmd>lua vim.lsp.buf.incoming_calls()<CR>
-nnoremap <silent> gd        <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gt        <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr        <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> gn        <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> gs        <cmd>lua vim.lsp.buf.document_symbol()<CR>
@@ -197,3 +207,9 @@ vim.keymap.set('n', 'cb', '<Plug>(comment_toggle_blockwise_current)')
 -- Toggle in VISUAL mode
 vim.keymap.set('x', 'cc', '<Plug>(comment_toggle_linewise_visual)')
 vim.keymap.set('x', 'cb', '<Plug>(comment_toggle_blockwise_visual)')
+
+
+-- Own Bindings
+--vim.keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle)
+
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
